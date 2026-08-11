@@ -1,12 +1,8 @@
 public class Main {
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
 
-        Student s1 = new Student("Akash",21,"IT","24BBTIT004");
-        s1.setName("Akash Kuruba");
-        s1.setAge(21);
-        s1.setBranch("CSE");
-        s1.setUsn("24BBTIT004");
+        Student s1 = new Student("Akash Kuruba",21,"CSE","24BBTIT004");
 
         Student s2 = new Student("Ranjith");
 
@@ -16,5 +12,7 @@ public class Main {
         System.out.println(s1.getUsn());
 
         System.out.println(s2.getName());
+
+        s1.display();
     }
 }
