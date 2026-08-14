@@ -4,6 +4,8 @@ public class Main {
 
         Student s1 = new Student("Akash Kuruba",21,"CSE","24BBTIT004");
 
+        Person p1 = new Student("Ranjith");
+
         Student s2 = new Student("Ranjith");
 
         System.out.println(s1.getName());
@@ -13,6 +15,7 @@ public class Main {
 
         System.out.println(s2.getName());
 
+        s1.display();
         s1.display();
     }
 }
