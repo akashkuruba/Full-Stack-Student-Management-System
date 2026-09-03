@@ -19,7 +19,11 @@ public class StudentManager {
         recentStudents = new LinkedList<>();
     }
 
-    public boolean addStudent(Student student) {
+    public boolean addStudent(Student student) throws InvalidAgeException {
+
+        if (student.getAge() < 18) {
+            throw new InvalidAgeException("Age must be 18 or above");
+        }
 
         if (usns.contains(student.getUsn())) {
             return false;
@@ -58,39 +62,49 @@ public class StudentManager {
         }
     }
 
-    public Student searchStudent(String usn) {
+    public Student searchStudent(String usn)
+            throws StudentNotFoundException {
 
         if (studentMap.containsKey(usn)) {
             return studentMap.get(usn);
         }
 
-        return null;
+        throw new StudentNotFoundException(
+                "Student with USN " + usn + " not found."
+        );
     }
 
-    public boolean removeStudent(String usn) {
+    public boolean removeStudent(String usn)
+            throws StudentNotFoundException {
 
         Student student = studentMap.remove(usn);
 
         if (student != null) {
 
             students.remove(student);
-            usns.remove(usn);
-            recentStudents.remove(student);
-
             return true;
         }
 
-        return false;
+        throw new StudentNotFoundException(
+                "Student with USN " + usn + " not found."
+        );
     }
 
-    public boolean updateStudent(String oldUsn, Student updatedStudent) {
+    public boolean updateStudent(
+            String oldUsn,
+            Student updatedStudent
+    ) throws StudentNotFoundException {
 
         if (!studentMap.containsKey(oldUsn)) {
-            return false;
+
+            throw new StudentNotFoundException(
+                    "Student with USN " + oldUsn + " not found."
+            );
         }
 
         if (!oldUsn.equals(updatedStudent.getUsn())
                 && usns.contains(updatedStudent.getUsn())) {
+
             return false;
         }
 

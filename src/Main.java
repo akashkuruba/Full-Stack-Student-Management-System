@@ -29,6 +29,8 @@ public class Main {
 
         System.out.println("After removeLast: " + names);
 
+
+        // Create Student 1
         Student s1 = new Student(
                 "Akash Kuruba",
                 21,
@@ -36,63 +38,104 @@ public class Main {
                 "24BBTIT004"
         );
 
+
+        // Create Student 2
         Student s2 = new Student("Ranjith");
 
         s2.setAge(21);
         s2.setBranch("CSE");
         s2.setUsn("24BBTIT005");
 
+
         // Add students
-        boolean added1 = manager.addStudent(s1);
-        boolean added2 = manager.addStudent(s2);
+        try {
 
-        System.out.println("Akash added: " + added1);
-        System.out.println("Ranjith added: " + added2);
+            boolean added1 = manager.addStudent(s1);
+            boolean added2 = manager.addStudent(s2);
 
-        Student duplicateStudent = new Student(
-                "Another Student",
-                20,
-                "CSE",
-                "24BBTIT005"
-        );
+            System.out.println("Akash added: " + added1);
+            System.out.println("Ranjith added: " + added2);
 
-        boolean duplicateAdded = manager.addStudent(duplicateStudent);
 
-        System.out.println("Duplicate student added: " + duplicateAdded);
+            // Duplicate student
+            Student duplicateStudent = new Student(
+                    "Another Student",
+                    20,
+                    "CSE",
+                    "24BBTIT005"
+            );
+
+            boolean duplicateAdded =
+                    manager.addStudent(duplicateStudent);
+
+            System.out.println(
+                    "Duplicate student added: "
+                            + duplicateAdded
+            );
+
+        } catch (InvalidAgeException e) {
+
+            System.out.println(
+                    "Error: " + e.getMessage()
+            );
+        }
+
 
         // Display students
         manager.displayStudents();
 
-        // Search student
-        Student foundStudent = manager.searchStudent("24BBTIT004");
 
-        if (foundStudent != null) {
+        // Search student
+        try {
+
+            Student foundStudent =
+                    manager.searchStudent("24BBTIT004");
 
             System.out.println("Student Found:");
-            System.out.println("Name: " + foundStudent.getName());
-            System.out.println("USN: " + foundStudent.getUsn());
+            System.out.println(
+                    "Name: " + foundStudent.getName()
+            );
+            System.out.println(
+                    "USN: " + foundStudent.getUsn()
+            );
 
-        } else {
+        } catch (StudentNotFoundException e) {
 
-            System.out.println("Student not found.");
+            System.out.println(
+                    "Error: " + e.getMessage()
+            );
         }
+
 
         // Remove Akash
-        boolean removed = manager.removeStudent("24BBTIT004");
+        try {
 
-        System.out.println();
+            boolean removed =
+                    manager.removeStudent("24BBTIT004");
 
-        if (removed) {
-            System.out.println("Student removed successfully.");
-        } else {
-            System.out.println("Student not found.");
+            System.out.println();
+
+            if (removed) {
+                System.out.println(
+                        "Student removed successfully."
+                );
+            }
+
+        } catch (StudentNotFoundException e) {
+
+            System.out.println();
+            System.out.println(
+                    "Error: " + e.getMessage()
+            );
         }
+
 
         manager.displayStudents();
 
         System.out.println();
 
         manager.displayRecentStudents();
+
 
         // Update Ranjith
         Student s3 = new Student(
@@ -102,18 +145,38 @@ public class Main {
                 "24BBTIT006"
         );
 
-        boolean updated = manager.updateStudent(
-                "24BBTIT005",
-                s3
-        );
 
-        System.out.println();
+        try {
 
-        if (updated) {
-            System.out.println("Student updated successfully.");
-        } else {
-            System.out.println("Student not found.");
+            boolean updated =
+                    manager.updateStudent(
+                            "24BBTIT005",
+                            s3
+                    );
+
+            System.out.println();
+
+            if (updated) {
+
+                System.out.println(
+                        "Student updated successfully."
+                );
+
+            } else {
+
+                System.out.println(
+                        "Updated USN already exists."
+                );
+            }
+
+        } catch (StudentNotFoundException e) {
+
+            System.out.println();
+            System.out.println(
+                    "Error: " + e.getMessage()
+            );
         }
+
 
         manager.displayStudents();
     }
