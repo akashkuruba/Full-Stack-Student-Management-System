@@ -74,6 +74,65 @@ public class StudentManager {
         );
     }
 
+    public Student searchByName(String name)
+            throws StudentNotFoundException {
+
+        for (Student student : students) {
+
+            if (student.getName().equalsIgnoreCase(name)) {
+                return student;
+            }
+        }
+
+        throw new StudentNotFoundException(
+                "Student with name " + name + " not found."
+        );
+    }
+
+    public List<Student> searchByBranch(String branch) {
+
+        List<Student> result = new ArrayList<>();
+
+        for (Student student : students) {
+
+            if (student.getBranch().equalsIgnoreCase(branch)) {
+                result.add(student);
+            }
+        }
+
+        return result;
+    }
+
+    public List<Student> searchByAge(int age) {
+
+        List<Student> result = new ArrayList<>();
+
+        for (Student student : students) {
+
+            if (student.getAge() == age) {
+                result.add(student);
+            }
+        }
+
+        return result;
+    }
+
+    public List<Student> searchByBranchAndAge(String branch, int age) {
+
+        List<Student> result = new ArrayList<>();
+
+        for (Student student : students) {
+
+            if (student.getBranch().equalsIgnoreCase(branch)
+                    && student.getAge() == age) {
+
+                result.add(student);
+            }
+        }
+
+        return result;
+    }
+
     public boolean removeStudent(String usn)
             throws StudentNotFoundException {
 

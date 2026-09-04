@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.List;
 
 public class Main {
 
@@ -106,6 +107,77 @@ public class Main {
             );
         }
 
+        // Search student by name
+        try {
+
+            Student foundStudent =
+                    manager.searchByName("Akash Kuruba");
+
+            System.out.println();
+            System.out.println("Student Found By Name:");
+            System.out.println(
+                    "Name: " + foundStudent.getName()
+            );
+            System.out.println(
+                    "USN: " + foundStudent.getUsn()
+            );
+
+        } catch (StudentNotFoundException e) {
+
+            System.out.println(
+                    "Error: " + e.getMessage()
+            );
+        }
+
+        // Search students by branch
+        List<Student> cseStudents =
+                manager.searchByBranch("CSE");
+
+        System.out.println();
+        System.out.println("CSE Students:");
+
+        for (Student student : cseStudents) {
+
+            System.out.println(
+                    student.getName()
+            );
+        }
+
+        // Search students by age
+        List<Student> studentsWithAge21 =
+                manager.searchByAge(21);
+
+        System.out.println();
+        System.out.println("Students with age 21:");
+
+        for (Student student : studentsWithAge21) {
+
+            System.out.println(
+                    student.getName()
+            );
+        }
+
+        // Search students by branch and age
+        List<Student> filteredStudents =
+                manager.searchByBranchAndAge("CSE", 21);
+
+        System.out.println();
+
+        System.out.println("CSE students aged 21:");
+
+        if (filteredStudents.isEmpty()) {
+
+            System.out.println("No students found.");
+
+        } else {
+
+            for (Student student : filteredStudents) {
+
+                System.out.println(
+                        student.getName()
+                );
+            }
+        }
 
         // Remove Akash
         try {
