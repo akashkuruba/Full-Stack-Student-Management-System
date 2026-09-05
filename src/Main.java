@@ -209,14 +209,12 @@ public class Main {
         manager.displayRecentStudents();
 
 
-        // Update Ranjith
         Student s3 = new Student(
                 "Rahul",
                 22,
                 "IT",
                 "24BBTIT006"
         );
-
 
         try {
 
@@ -234,11 +232,6 @@ public class Main {
                         "Student updated successfully."
                 );
 
-            } else {
-
-                System.out.println(
-                        "Updated USN already exists."
-                );
             }
 
         } catch (StudentNotFoundException e) {
@@ -247,9 +240,19 @@ public class Main {
             System.out.println(
                     "Error: " + e.getMessage()
             );
+
+        } catch (DuplicateUsnException e) {
+
+            System.out.println();
+            System.out.println(
+                    "Error: " + e.getMessage()
+            );
         }
 
+        System.out.println();
+        System.out.println("Students after update:");
 
         manager.displayStudents();
     }
 }
+

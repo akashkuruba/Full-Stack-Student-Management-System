@@ -152,7 +152,7 @@ public class StudentManager {
     public boolean updateStudent(
             String oldUsn,
             Student updatedStudent
-    ) throws StudentNotFoundException {
+    ) throws StudentNotFoundException, DuplicateUsnException {
 
         if (!studentMap.containsKey(oldUsn)) {
 
@@ -164,7 +164,10 @@ public class StudentManager {
         if (!oldUsn.equals(updatedStudent.getUsn())
                 && usns.contains(updatedStudent.getUsn())) {
 
-            return false;
+            throw new DuplicateUsnException(
+                    "USN " + updatedStudent.getUsn()
+                            + " already belongs to another student."
+            );
         }
 
         Student oldStudent = studentMap.get(oldUsn);
