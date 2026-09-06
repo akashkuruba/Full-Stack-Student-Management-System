@@ -141,6 +141,9 @@ public class StudentManager {
         if (student != null) {
 
             students.remove(student);
+            usns.remove(usn);
+            recentStudents.remove(student);
+
             return true;
         }
 

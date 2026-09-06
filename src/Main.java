@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -7,6 +8,7 @@ public class Main {
 
         StudentManager manager = new StudentManager();
 
+        // LinkedList demo
         LinkedList<String> names = new LinkedList<>();
 
         names.add("Akash");
@@ -15,19 +17,15 @@ public class Main {
         System.out.println("LinkedList: " + names);
 
         names.addFirst("Rahul");
-
         System.out.println("After addFirst: " + names);
 
         names.addLast("Kiran");
-
         System.out.println("After addLast: " + names);
 
         names.removeFirst();
-
         System.out.println("After removeFirst: " + names);
 
         names.removeLast();
-
         System.out.println("After removeLast: " + names);
 
 
@@ -52,13 +50,22 @@ public class Main {
         try {
 
             boolean added1 = manager.addStudent(s1);
-            boolean added2 = manager.addStudent(s2);
-
             System.out.println("Akash added: " + added1);
+
+            boolean added2 = manager.addStudent(s2);
             System.out.println("Ranjith added: " + added2);
 
+        } catch (InvalidAgeException e) {
 
-            // Duplicate student
+            System.out.println(
+                    "Error: " + e.getMessage()
+            );
+        }
+
+
+        // Try duplicate student
+        try {
+
             Student duplicateStudent = new Student(
                     "Another Student",
                     20,
@@ -82,16 +89,17 @@ public class Main {
         }
 
 
-        // Display students
+        // Display all students
         manager.displayStudents();
 
 
-        // Search student
+        // Search by USN
         try {
 
             Student foundStudent =
                     manager.searchStudent("24BBTIT004");
 
+            System.out.println();
             System.out.println("Student Found:");
             System.out.println(
                     "Name: " + foundStudent.getName()
@@ -102,34 +110,40 @@ public class Main {
 
         } catch (StudentNotFoundException e) {
 
+            System.out.println();
             System.out.println(
                     "Error: " + e.getMessage()
             );
         }
 
-        // Search student by name
+
+        // Search by Name
         try {
 
-            Student foundStudent =
+            Student foundByName =
                     manager.searchByName("Akash Kuruba");
 
             System.out.println();
-            System.out.println("Student Found By Name:");
             System.out.println(
-                    "Name: " + foundStudent.getName()
+                    "Student Found By Name:"
             );
             System.out.println(
-                    "USN: " + foundStudent.getUsn()
+                    "Name: " + foundByName.getName()
+            );
+            System.out.println(
+                    "USN: " + foundByName.getUsn()
             );
 
         } catch (StudentNotFoundException e) {
 
+            System.out.println();
             System.out.println(
                     "Error: " + e.getMessage()
             );
         }
 
-        // Search students by branch
+
+        // Search by Branch
         List<Student> cseStudents =
                 manager.searchByBranch("CSE");
 
@@ -137,71 +151,118 @@ public class Main {
         System.out.println("CSE Students:");
 
         for (Student student : cseStudents) {
-
-            System.out.println(
-                    student.getName()
-            );
+            System.out.println(student.getName());
         }
 
-        // Search students by age
-        List<Student> studentsWithAge21 =
+
+        // Search by Age
+        List<Student> ageStudents =
                 manager.searchByAge(21);
 
         System.out.println();
-        System.out.println("Students with age 21:");
+        System.out.println(
+                "Students with age 21:"
+        );
 
-        for (Student student : studentsWithAge21) {
-
-            System.out.println(
-                    student.getName()
-            );
+        for (Student student : ageStudents) {
+            System.out.println(student.getName());
         }
 
-        // Search students by branch and age
+
+        // Search by Branch and Age
         List<Student> filteredStudents =
-                manager.searchByBranchAndAge("CSE", 21);
+                manager.searchByBranchAndAge(
+                        "CSE",
+                        21
+                );
 
         System.out.println();
+        System.out.println(
+                "CSE students aged 21:"
+        );
 
-        System.out.println("CSE students aged 21:");
+        for (Student student : filteredStudents) {
+            System.out.println(student.getName());
+        }
 
-        if (filteredStudents.isEmpty()) {
 
-            System.out.println("No students found.");
+        // Delete student with confirmation
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print(
+                "\nAre you sure you want to delete "
+                        + "24BBTIT004? (yes/no): "
+        );
+
+        String choice = scanner.nextLine();
+
+        if (choice.equalsIgnoreCase("yes")) {
+
+            try {
+
+                boolean removed =
+                        manager.removeStudent(
+                                "24BBTIT004"
+                        );
+
+                System.out.println();
+
+                if (removed) {
+
+                    System.out.println(
+                            "Student removed successfully."
+                    );
+                }
+
+            } catch (StudentNotFoundException e) {
+
+                System.out.println();
+                System.out.println(
+                        "Error: " + e.getMessage()
+                );
+            }
 
         } else {
 
-            for (Student student : filteredStudents) {
-
-                System.out.println(
-                        student.getName()
-                );
-            }
+            System.out.println();
+            System.out.println(
+                    "Delete operation cancelled."
+            );
         }
 
-        // Remove Akash
+
+        // Test deleting non-existent student
         try {
 
-            boolean removed =
-                    manager.removeStudent("24BBTIT004");
-
-            System.out.println();
-
-            if (removed) {
-                System.out.println(
-                        "Student removed successfully."
-                );
-            }
+            manager.removeStudent("999999");
 
         } catch (StudentNotFoundException e) {
 
             System.out.println();
             System.out.println(
-                    "Error: " + e.getMessage()
+                    "Delete Error: "
+                            + e.getMessage()
             );
         }
 
 
+        // Verify deleted student
+        try {
+
+            manager.searchStudent("24BBTIT004");
+
+        } catch (StudentNotFoundException e) {
+
+            System.out.println();
+            System.out.println(
+                    "Search after delete: "
+                            + e.getMessage()
+            );
+        }
+
+
+        // Display students after deletion
+        System.out.println();
         manager.displayStudents();
 
         System.out.println();
@@ -209,6 +270,7 @@ public class Main {
         manager.displayRecentStudents();
 
 
+        // Create updated student
         Student s3 = new Student(
                 "Rahul",
                 22,
@@ -216,6 +278,8 @@ public class Main {
                 "24BBTIT006"
         );
 
+
+        // Update student
         try {
 
             boolean updated =
@@ -231,7 +295,6 @@ public class Main {
                 System.out.println(
                         "Student updated successfully."
                 );
-
             }
 
         } catch (StudentNotFoundException e) {
@@ -249,10 +312,14 @@ public class Main {
             );
         }
 
+
+        // Display students after update
         System.out.println();
         System.out.println("Students after update:");
 
         manager.displayStudents();
+
+
+        scanner.close();
     }
 }
-
