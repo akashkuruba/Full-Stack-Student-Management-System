@@ -8,6 +8,8 @@ public class Main {
 
         StudentManager manager = new StudentManager();
 
+        Scanner scanner = new Scanner(System.in);
+
         // LinkedList demo
         LinkedList<String> names = new LinkedList<>();
 
@@ -63,7 +65,7 @@ public class Main {
         }
 
 
-        // Try duplicate student
+        // Duplicate student test
         try {
 
             Student duplicateStudent = new Student(
@@ -89,236 +91,209 @@ public class Main {
         }
 
 
-        // Display all students
-        manager.displayStudents();
+        // Version 11 - Menu
+        int choice = 0;
 
-
-        // Search by USN
-        try {
-
-            Student foundStudent =
-                    manager.searchStudent("24BBTIT004");
-
-            System.out.println();
-            System.out.println("Student Found:");
-            System.out.println(
-                    "Name: " + foundStudent.getName()
-            );
-            System.out.println(
-                    "USN: " + foundStudent.getUsn()
-            );
-
-        } catch (StudentNotFoundException e) {
+        while (choice != 6) {
 
             System.out.println();
             System.out.println(
-                    "Error: " + e.getMessage()
+                    "===== Student Management System ====="
             );
-        }
+            System.out.println("1. Add Student");
+            System.out.println("2. Display Students");
+            System.out.println("3. Search Student");
+            System.out.println("4. Update Student");
+            System.out.println("5. Delete Student");
+            System.out.println("6. Exit");
 
+            System.out.print("Enter your choice: ");
 
-        // Search by Name
-        try {
-
-            Student foundByName =
-                    manager.searchByName("Akash Kuruba");
+            choice = scanner.nextInt();
 
             System.out.println();
-            System.out.println(
-                    "Student Found By Name:"
-            );
-            System.out.println(
-                    "Name: " + foundByName.getName()
-            );
-            System.out.println(
-                    "USN: " + foundByName.getUsn()
-            );
 
-        } catch (StudentNotFoundException e) {
+            switch (choice) {
 
-            System.out.println();
-            System.out.println(
-                    "Error: " + e.getMessage()
-            );
-        }
+                case 1:
 
+                    scanner.nextLine(); // clear leftover Enter
 
-        // Search by Branch
-        List<Student> cseStudents =
-                manager.searchByBranch("CSE");
+                    System.out.print("Enter student name: ");
+                    String name = scanner.nextLine();
 
-        System.out.println();
-        System.out.println("CSE Students:");
+                    System.out.print("Enter student age: ");
+                    int age = scanner.nextInt();
 
-        for (Student student : cseStudents) {
-            System.out.println(student.getName());
-        }
+                    scanner.nextLine(); // clear leftover Enter
 
+                    System.out.print("Enter student branch: ");
+                    String branch = scanner.nextLine();
 
-        // Search by Age
-        List<Student> ageStudents =
-                manager.searchByAge(21);
+                    System.out.print("Enter student USN: ");
+                    String usn = scanner.nextLine();
 
-        System.out.println();
-        System.out.println(
-                "Students with age 21:"
-        );
+                    Student newStudent = new Student(
+                            name,
+                            age,
+                            branch,
+                            usn
+                    );
 
-        for (Student student : ageStudents) {
-            System.out.println(student.getName());
-        }
+                    try {
 
+                        boolean added =
+                                manager.addStudent(newStudent);
 
-        // Search by Branch and Age
-        List<Student> filteredStudents =
-                manager.searchByBranchAndAge(
-                        "CSE",
-                        21
-                );
+                        if (added) {
+                            System.out.println(
+                                    "Student added successfully."
+                            );
+                        } else {
+                            System.out.println(
+                                    "Student with this USN already exists."
+                            );
+                        }
 
-        System.out.println();
-        System.out.println(
-                "CSE students aged 21:"
-        );
+                    } catch (InvalidAgeException e) {
 
-        for (Student student : filteredStudents) {
-            System.out.println(student.getName());
-        }
+                        System.out.println(
+                                "Error: " + e.getMessage()
+                        );
+                    }
 
+                    break;
 
-        // Delete student with confirmation
-        Scanner scanner = new Scanner(System.in);
+                case 2:
 
-        System.out.print(
-                "\nAre you sure you want to delete "
-                        + "24BBTIT004? (yes/no): "
-        );
+                    manager.displayStudents();
 
-        String choice = scanner.nextLine();
+                    break;
 
-        if (choice.equalsIgnoreCase("yes")) {
+                case 3:
 
-            try {
+                    scanner.nextLine(); // clear leftover Enter
 
-                boolean removed =
-                        manager.removeStudent(
-                                "24BBTIT004"
+                    System.out.print("Enter USN to search: ");
+                    String searchUsn = scanner.nextLine();
+
+                    try {
+
+                        Student foundStudent =
+                                manager.searchStudent(searchUsn);
+
+                        System.out.println();
+                        System.out.println("Student Found:");
+                        System.out.println("Name: " + foundStudent.getName());
+                        System.out.println("Age: " + foundStudent.getAge());
+                        System.out.println("Branch: " + foundStudent.getBranch());
+                        System.out.println("USN: " + foundStudent.getUsn());
+
+                    } catch (StudentNotFoundException e) {
+
+                        System.out.println(
+                                "Search Error: " + e.getMessage()
+                        );
+                    }
+
+                    break;
+
+                case 4:
+
+                    scanner.nextLine(); // clear leftover Enter
+
+                    System.out.print("Enter old USN: ");
+                    String oldUsn = scanner.nextLine();
+
+                    System.out.print("Enter new name: ");
+                    String newName = scanner.nextLine();
+
+                    System.out.print("Enter new age: ");
+                    int newAge = scanner.nextInt();
+
+                    scanner.nextLine(); // clear leftover Enter
+
+                    System.out.print("Enter new branch: ");
+                    String newBranch = scanner.nextLine();
+
+                    System.out.print("Enter new USN: ");
+                    String newUsn = scanner.nextLine();
+
+                    Student updatedStudent = new Student(
+                            newName,
+                            newAge,
+                            newBranch,
+                            newUsn
+                    );
+
+                    try {
+
+                        boolean updated =
+                                manager.updateStudent(
+                                        oldUsn,
+                                        updatedStudent
+                                );
+
+                        if (updated) {
+                            System.out.println(
+                                    "Student updated successfully."
+                            );
+                        }
+
+                    } catch (StudentNotFoundException e) {
+
+                        System.out.println(
+                                "Update Error: " + e.getMessage()
                         );
 
-                System.out.println();
+                    } catch (DuplicateUsnException e) {
 
-                if (removed) {
+                        System.out.println(
+                                "Update Error: " + e.getMessage()
+                        );
+                    }
 
+                    break;
+
+                case 5:
+
+                    scanner.nextLine(); // clear leftover Enter
+
+                    System.out.print("Enter USN to delete: ");
+                    String deleteUsn = scanner.nextLine();
+
+                    try {
+
+                        boolean deleted =
+                                manager.removeStudent(deleteUsn);
+
+                        if (deleted) {
+                            System.out.println(
+                                    "Student removed successfully."
+                            );
+                        }
+
+                    } catch (StudentNotFoundException e) {
+
+                        System.out.println(
+                                "Delete Error: " + e.getMessage()
+                        );
+                    }
+
+                    break;
+
+                case 6:
                     System.out.println(
-                            "Student removed successfully."
+                            "Exiting Student Management System..."
                     );
-                }
+                    break;
 
-            } catch (StudentNotFoundException e) {
-
-                System.out.println();
-                System.out.println(
-                        "Error: " + e.getMessage()
-                );
-            }
-
-        } else {
-
-            System.out.println();
-            System.out.println(
-                    "Delete operation cancelled."
-            );
-        }
-
-
-        // Test deleting non-existent student
-        try {
-
-            manager.removeStudent("999999");
-
-        } catch (StudentNotFoundException e) {
-
-            System.out.println();
-            System.out.println(
-                    "Delete Error: "
-                            + e.getMessage()
-            );
-        }
-
-
-        // Verify deleted student
-        try {
-
-            manager.searchStudent("24BBTIT004");
-
-        } catch (StudentNotFoundException e) {
-
-            System.out.println();
-            System.out.println(
-                    "Search after delete: "
-                            + e.getMessage()
-            );
-        }
-
-
-        // Display students after deletion
-        System.out.println();
-        manager.displayStudents();
-
-        System.out.println();
-
-        manager.displayRecentStudents();
-
-
-        // Create updated student
-        Student s3 = new Student(
-                "Rahul",
-                22,
-                "IT",
-                "24BBTIT006"
-        );
-
-
-        // Update student
-        try {
-
-            boolean updated =
-                    manager.updateStudent(
-                            "24BBTIT005",
-                            s3
+                default:
+                    System.out.println(
+                            "Invalid choice. Please try again."
                     );
-
-            System.out.println();
-
-            if (updated) {
-
-                System.out.println(
-                        "Student updated successfully."
-                );
             }
-
-        } catch (StudentNotFoundException e) {
-
-            System.out.println();
-            System.out.println(
-                    "Error: " + e.getMessage()
-            );
-
-        } catch (DuplicateUsnException e) {
-
-            System.out.println();
-            System.out.println(
-                    "Error: " + e.getMessage()
-            );
         }
-
-
-        // Display students after update
-        System.out.println();
-        System.out.println("Students after update:");
-
-        manager.displayStudents();
-
 
         scanner.close();
     }
