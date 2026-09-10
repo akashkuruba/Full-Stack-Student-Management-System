@@ -4,6 +4,10 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class StudentManager {
 
@@ -188,5 +192,88 @@ public class StudentManager {
         recentStudents.addFirst(updatedStudent);
 
         return true;
+    }
+    public void saveStudentsToFile() {
+
+        try {
+
+            FileWriter writer =
+                    new FileWriter("students.txt");
+
+            for (Student student : students) {
+
+                writer.write(
+                        student.getName() + ","
+                                + student.getAge() + ","
+                                + student.getBranch() + ","
+                                + student.getUsn() + "\n"
+                );
+            }
+
+            writer.close();
+
+            System.out.println(
+                    "Students saved to file successfully."
+            );
+
+        } catch (IOException e) {
+
+            System.out.println(
+                    "File Error: " + e.getMessage()
+            );
+        }
+    }
+    public void loadStudentsFromFile() {
+
+        students.clear();
+        studentMap.clear();
+        usns.clear();
+        recentStudents.clear();
+
+        try {
+
+            BufferedReader reader =
+                    new BufferedReader(
+                            new FileReader("students.txt")
+                    );
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+
+                String[] data = line.split(",");
+
+                String name = data[0];
+                int age = Integer.parseInt(data[1]);
+                String branch = data[2];
+                String usn = data[3];
+
+                Student student = new Student(
+                        name,
+                        age,
+                        branch,
+                        usn
+                );
+
+                students.add(student);
+                studentMap.put(usn, student);
+                usns.add(usn);
+                recentStudents.addFirst(student);
+
+                System.out.println("Name: " + name);
+                System.out.println("Age: " + age);
+                System.out.println("Branch: " + branch);
+                System.out.println("USN: " + usn);
+                System.out.println();
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+
+            System.out.println(
+                    "File Error: " + e.getMessage()
+            );
+        }
     }
 }

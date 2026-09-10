@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -8,93 +6,14 @@ public class Main {
 
         StudentManager manager = new StudentManager();
 
+        manager.loadStudentsFromFile();
+
         Scanner scanner = new Scanner(System.in);
-
-        // LinkedList demo
-        LinkedList<String> names = new LinkedList<>();
-
-        names.add("Akash");
-        names.add("Ranjith");
-
-        System.out.println("LinkedList: " + names);
-
-        names.addFirst("Rahul");
-        System.out.println("After addFirst: " + names);
-
-        names.addLast("Kiran");
-        System.out.println("After addLast: " + names);
-
-        names.removeFirst();
-        System.out.println("After removeFirst: " + names);
-
-        names.removeLast();
-        System.out.println("After removeLast: " + names);
-
-
-        // Create Student 1
-        Student s1 = new Student(
-                "Akash Kuruba",
-                21,
-                "CSE",
-                "24BBTIT004"
-        );
-
-
-        // Create Student 2
-        Student s2 = new Student("Ranjith");
-
-        s2.setAge(21);
-        s2.setBranch("CSE");
-        s2.setUsn("24BBTIT005");
-
-
-        // Add students
-        try {
-
-            boolean added1 = manager.addStudent(s1);
-            System.out.println("Akash added: " + added1);
-
-            boolean added2 = manager.addStudent(s2);
-            System.out.println("Ranjith added: " + added2);
-
-        } catch (InvalidAgeException e) {
-
-            System.out.println(
-                    "Error: " + e.getMessage()
-            );
-        }
-
-
-        // Duplicate student test
-        try {
-
-            Student duplicateStudent = new Student(
-                    "Another Student",
-                    20,
-                    "CSE",
-                    "24BBTIT005"
-            );
-
-            boolean duplicateAdded =
-                    manager.addStudent(duplicateStudent);
-
-            System.out.println(
-                    "Duplicate student added: "
-                            + duplicateAdded
-            );
-
-        } catch (InvalidAgeException e) {
-
-            System.out.println(
-                    "Error: " + e.getMessage()
-            );
-        }
-
 
         // Version 11 - Menu
         int choice = 0;
 
-        while (choice != 6) {
+        while (choice != 7) {
 
             System.out.println();
             System.out.println(
@@ -105,7 +24,8 @@ public class Main {
             System.out.println("3. Search Student");
             System.out.println("4. Update Student");
             System.out.println("5. Delete Student");
-            System.out.println("6. Exit");
+            System.out.println("6. Save Students");
+            System.out.println("7. Exit");
 
             System.out.print("Enter your choice: ");
 
@@ -283,6 +203,14 @@ public class Main {
                     break;
 
                 case 6:
+                    manager.saveStudentsToFile();
+
+                    System.out.println(
+                            "Students saved successfully."
+                    );
+                    break;
+
+                case 7:
                     System.out.println(
                             "Exiting Student Management System..."
                     );
