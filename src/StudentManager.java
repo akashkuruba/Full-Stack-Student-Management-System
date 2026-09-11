@@ -148,6 +148,8 @@ public class StudentManager {
             usns.remove(usn);
             recentStudents.remove(student);
 
+            Student.decrementStudentCount();
+
             return true;
         }
 
@@ -179,6 +181,8 @@ public class StudentManager {
 
         Student oldStudent = studentMap.get(oldUsn);
 
+        Student.decrementStudentCount();
+
         students.remove(oldStudent);
         students.add(updatedStudent);
 
@@ -193,6 +197,7 @@ public class StudentManager {
 
         return true;
     }
+
     public void saveStudentsToFile() {
 
         try {
@@ -229,6 +234,8 @@ public class StudentManager {
         studentMap.clear();
         usns.clear();
         recentStudents.clear();
+
+        Student.resetStudentCount();
 
         try {
 

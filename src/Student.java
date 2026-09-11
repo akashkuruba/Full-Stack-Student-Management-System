@@ -1,5 +1,7 @@
 public class Student extends Person {
 
+    private static int studentCount = 0;
+
     private String branch;
     private String usn;
 
@@ -13,6 +15,20 @@ public class Student extends Person {
 
         this.branch = branch;
         this.usn = usn;
+
+        studentCount++;
+    }
+
+    public static void decrementStudentCount() {
+        studentCount--;
+    }
+
+    public static void resetStudentCount() {
+        studentCount = 0;
+    }
+
+    public static int getStudentCount() {
+        return studentCount;
     }
 
     Student(String name) {

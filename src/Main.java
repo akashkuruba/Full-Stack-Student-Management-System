@@ -8,6 +8,11 @@ public class Main {
 
         manager.loadStudentsFromFile();
 
+        System.out.println(
+                "Total students created: "
+                        + Student.getStudentCount()
+        );
+
         Scanner scanner = new Scanner(System.in);
 
         // Version 11 - Menu
