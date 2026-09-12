@@ -2,6 +2,16 @@ public class Student extends Person {
 
     private static int studentCount = 0;
 
+    private static final String COLLEGE_NAME = "CMR University";
+
+    public static String getCollegeName() {
+        return COLLEGE_NAME;
+    }
+
+    public final void displayCollegeRule() {
+        System.out.println("Students must follow college rules.");
+    }
+
     private String branch;
     private String usn;
 

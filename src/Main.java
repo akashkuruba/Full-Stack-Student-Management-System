@@ -13,9 +13,12 @@ public class Main {
                         + Student.getStudentCount()
         );
 
+        System.out.println(
+                "College: " + Student.getCollegeName()
+        );
+
         Scanner scanner = new Scanner(System.in);
 
-        // Version 11 - Menu
         int choice = 0;
 
         while (choice != 7) {
