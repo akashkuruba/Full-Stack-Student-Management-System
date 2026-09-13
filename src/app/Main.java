@@ -1,3 +1,11 @@
+package app;
+
+import model.Student;
+import manager.StudentManager;
+
+import exception.DuplicateUsnException;
+import exception.InvalidAgeException;
+import exception.StudentNotFoundException;
 import java.util.Scanner;
 
 public class Main {

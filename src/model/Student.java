@@ -1,3 +1,5 @@
+package model;
+
 public class Student extends Person {
 
     private static int studentCount = 0;
@@ -19,7 +21,7 @@ public class Student extends Person {
         super("",0);
     }
 
-    Student(String name, int age, String branch, String usn) {
+    public Student(String name, int age, String branch, String usn) {
 
         super(name, age);
 
