@@ -7,6 +7,7 @@ import exception.StudentNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ import java.io.FileReader;
 public class StudentManager {
 
     private List<Student> students;
-    private HashMap<String, Student> studentMap;
+    private Map<String, Student> studentMap;
     private Set<String> usns;
     private LinkedList<Student> recentStudents;
 
@@ -35,14 +36,14 @@ public class StudentManager {
             throw new InvalidAgeException("Age must be 18 or above");
         }
 
-        if (usns.contains(student.getUsn())) {
+        boolean added = usns.add(student.getUsn());
+
+        if (!added) {
             return false;
         }
 
         students.add(student);
         studentMap.put(student.getUsn(), student);
-        usns.add(student.getUsn());
-
         recentStudents.addFirst(student);
 
         return true;
@@ -75,8 +76,10 @@ public class StudentManager {
     public Student searchStudent(String usn)
             throws StudentNotFoundException {
 
-        if (studentMap.containsKey(usn)) {
-            return studentMap.get(usn);
+        Student student = studentMap.get(usn);
+
+        if (student != null) {
+            return student;
         }
 
         throw new StudentNotFoundException(
