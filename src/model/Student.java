@@ -65,4 +65,12 @@ public class Student extends Person {
     public void display(){
         System.out.println("I am a student");
     }
+
+    @Override
+    public String toString() {
+        return "Name: " + getName()
+                + "\nAge: " + getAge()
+                + "\nBranch: " + branch
+                + "\nUSN: " + usn;
+    }
 }

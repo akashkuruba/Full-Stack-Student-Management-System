@@ -15,6 +15,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import db.DBConnection;
+
 
 public class StudentManager {
 
@@ -30,7 +34,7 @@ public class StudentManager {
         recentStudents = new LinkedList<>();
     }
 
-    public boolean addStudent(Student student) throws InvalidAgeException {
+    public boolean addStudent(Student student) throws InvalidAgeException, java.sql.SQLException {
 
         if (student.getAge() < 18) {
             throw new InvalidAgeException("Age must be 18 or above");
@@ -45,6 +49,19 @@ public class StudentManager {
         students.add(student);
         studentMap.put(student.getUsn(), student);
         recentStudents.addFirst(student);
+
+        Connection connection = DBConnection.getConnection();
+
+        String sql = "INSERT INTO students (usn, name, age, department) VALUES (?, ?, ?, ?)";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setString(1, student.getUsn());
+        statement.setString(2, student.getName());
+        statement.setInt(3, student.getAge());
+        statement.setString(4, student.getBranch());
+
+        statement.executeUpdate();
 
         return true;
     }
@@ -147,7 +164,7 @@ public class StudentManager {
     }
 
     public boolean removeStudent(String usn)
-            throws StudentNotFoundException {
+            throws StudentNotFoundException, java.sql.SQLException {
 
         Student student = studentMap.remove(usn);
 
@@ -159,6 +176,16 @@ public class StudentManager {
 
             Student.decrementStudentCount();
 
+            Connection connection = DBConnection.getConnection();
+
+            String sql = "DELETE FROM students WHERE usn = ?";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, usn);
+
+            statement.executeUpdate();
+
             return true;
         }
 
@@ -167,10 +194,8 @@ public class StudentManager {
         );
     }
 
-    public boolean updateStudent(
-            String oldUsn,
-            Student updatedStudent
-    ) throws StudentNotFoundException, DuplicateUsnException {
+    public boolean updateStudent(String oldUsn, Student updatedStudent)
+            throws StudentNotFoundException, DuplicateUsnException, java.sql.SQLException {
 
         if (!studentMap.containsKey(oldUsn)) {
 
@@ -203,6 +228,20 @@ public class StudentManager {
 
         recentStudents.remove(oldStudent);
         recentStudents.addFirst(updatedStudent);
+
+        Connection connection = DBConnection.getConnection();
+
+        String sql = "UPDATE students SET usn = ?, name = ?, age = ?, department = ? WHERE usn = ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setString(1, updatedStudent.getUsn());
+        statement.setString(2, updatedStudent.getName());
+        statement.setInt(3, updatedStudent.getAge());
+        statement.setString(4, updatedStudent.getBranch());
+        statement.setString(5, oldUsn);
+
+        statement.executeUpdate();
 
         return true;
     }
@@ -292,4 +331,57 @@ public class StudentManager {
             );
         }
     }
-}
+
+    public Student searchStudentFromDatabase(String usn)
+            throws java.sql.SQLException, StudentNotFoundException {
+
+        Connection connection = DBConnection.getConnection();
+
+        String sql = "SELECT * FROM students WHERE usn = ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setString(1, usn);
+
+        java.sql.ResultSet result = statement.executeQuery();
+
+        if (result.next()) {
+
+            String name = result.getString("name");
+            int age = result.getInt("age");
+            String branch = result.getString("department");
+
+            return new Student(name, age, branch, usn);
+        }
+
+        throw new StudentNotFoundException(
+                "Student with USN " + usn + " not found in database."
+        );
+    }
+
+        public void loadStudentsFromDatabase() throws java.sql.SQLException {
+
+            Connection connection = DBConnection.getConnection();
+
+            String sql = "SELECT * FROM students";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            java.sql.ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+
+                String usn = result.getString("usn");
+                String name = result.getString("name");
+                int age = result.getInt("age");
+                String branch = result.getString("department");
+
+                Student student = new Student(name, age, branch, usn);
+
+                students.add(student);
+                studentMap.put(usn, student);
+                usns.add(usn);
+                recentStudents.addFirst(student);
+            }
+        }
+    }
